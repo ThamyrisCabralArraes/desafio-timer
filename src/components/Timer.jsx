@@ -1,15 +1,20 @@
-import React, { Component } from 'react';
+import React, { Children, Component } from 'react';
 
 class Timer extends Component {
   state = {
-    totalTime: 15 * 60,
-    minutes: 0,
-    seconds: 0,
+    totalTime: 0,
+    minutes: '00',
+    seconds: '00',
     inputNumber: '',
   };
 
   handleChange = ({ target }) => {
     this.setState({ inputNumber: target.value });
+  };
+
+  handleStopTimer = () => {
+    clearInterval(this.timer);
+    this.setState({ minutes: '00', seconds: '00' });
   };
 
   render() {
@@ -24,12 +29,14 @@ class Timer extends Component {
         </div>
 
         <input
-          placeholder='ex: 5m 10s'
+          type='text'
+          placeholder='ex: 5m ou 5m 10s'
           value={inputNumber}
           onChange={this.handleChange}
         />
 
-        <button>Iniciar</button>
+        <button onClick={this.handleTimer}>Iniciar</button>
+        <button onClick={this.handleStopTimer}>Stop</button>
       </div>
     );
   }
