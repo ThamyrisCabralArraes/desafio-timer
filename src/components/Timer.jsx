@@ -81,7 +81,7 @@ class Timer extends Component {
         <input
           className='input input-bordered rounded-md input-accent w-full max-w-xs'
           type='text'
-          placeholder='ex: 5m ou 5m 10s'
+          placeholder='ex: 5m // 10s // 5m 10s'
           value={inputNumber}
           onChange={this.handleChange}
         />
