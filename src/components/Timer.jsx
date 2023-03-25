@@ -6,6 +6,7 @@ class Timer extends Component {
     minutes: '00',
     seconds: '00',
     inputNumber: '',
+    finished: false,
   };
 
   handleChange = ({ target }) => {
@@ -45,6 +46,11 @@ class Timer extends Component {
 
         this.setState({ minutes, seconds });
       }
+
+      if (totalTime === 0) {
+        clearInterval(this.timer);
+        this.setState({ finished: true });
+      }
     }, 1000);
   };
 
@@ -53,26 +59,59 @@ class Timer extends Component {
     this.setState({ minutes: '00', seconds: '00' });
   };
 
+  handleFineshed = () => {
+    this.setState({ finished: false });
+  };
+
   render() {
-    const { minutes, seconds, inputNumber } = this.state;
+    const { minutes, seconds, inputNumber, finished } = this.state;
 
     return (
-      <div>
+      <div className='flex flex-col justify-center items-center mt-10 gap-5'>
         <div>
-          <span>{minutes.toString().padStart(2, '0')}</span>
-          <span>:</span>
-          <span>{seconds.toString().padStart(2, '0')}</span>
+          <span className='countdown font-mono text-6xl'>
+            {minutes.toString().padStart(2, '0')}
+          </span>
+          <span className='countdown font-mono text-6xl'>:</span>
+          <span className='countdown font-mono text-6xl'>
+            {seconds.toString().padStart(2, '0')}
+          </span>
         </div>
 
         <input
+          className='input input-bordered rounded-md input-accent w-full max-w-xs'
           type='text'
           placeholder='ex: 5m ou 5m 10s'
           value={inputNumber}
           onChange={this.handleChange}
         />
 
-        <button onClick={this.handleTimer}>Iniciar</button>
-        <button onClick={this.handleStopTimer}>Stop</button>
+        <div className='flex justify-around  w-full max-w-xs'>
+          <button
+            onClick={this.handleTimer}
+            className='btn btn-primary w-24'
+          >
+            Start
+          </button>
+          <button
+            onClick={this.handleStopTimer}
+            className='btn btn-accent w-24'
+          >
+            Stop
+          </button>
+        </div>
+
+        {finished && (
+          <div className='flex flex-col justify-center items-center gap-5'>
+            <h1 className='text-2xl'>Time is Over!</h1>
+            <button
+              onClick={this.handleFineshed}
+              className='btn btn-success w-24'
+            >
+              Ok
+            </button>
+          </div>
+        )}
       </div>
     );
   }
