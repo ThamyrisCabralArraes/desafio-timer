@@ -12,6 +12,37 @@ class Timer extends Component {
     this.setState({ inputNumber: target.value });
   };
 
+  handleTimer = () => {
+    const { inputNumber } = this.state;
+    const [minutes, seconds] = inputNumber
+      .split('m')
+      .map((item) => item.replace('s', ''));
+
+    this.setState({
+      totalTime: Number(minutes) * 60 + Number(seconds),
+      inputNumber: '',
+    });
+
+    this.setState({ minutes: Number(minutes), seconds: Number(seconds) });
+
+    this.timer = setInterval(() => {
+      const { totalTime } = this.state;
+
+      if (totalTime > 0) {
+        this.setState({ totalTime: totalTime - 1 });
+      } else {
+        clearInterval(this.timer);
+      }
+
+      if (totalTime > 0) {
+        const minutes = Math.floor(totalTime / 60);
+        const seconds = totalTime % 60;
+
+        this.setState({ minutes, seconds });
+      }
+    }, 1000);
+  };
+
   handleStopTimer = () => {
     clearInterval(this.timer);
     this.setState({ minutes: '00', seconds: '00' });
