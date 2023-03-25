@@ -14,9 +14,18 @@ class Timer extends Component {
 
   handleTimer = () => {
     const { inputNumber } = this.state;
-    const [minutes, seconds] = inputNumber
-      .split('m')
-      .map((item) => item.replace('s', ''));
+    let minutes = 0;
+    let seconds = 0;
+
+    if (inputNumber.includes('m') && inputNumber.includes('s')) {
+      [minutes, seconds] = inputNumber
+        .split('m')
+        .map((item) => item.replace('s', ''));
+    } else if (inputNumber.includes('m')) {
+      minutes = inputNumber.replace('m', '');
+    } else if (inputNumber.includes('s')) {
+      seconds = inputNumber.replace('s', '');
+    }
 
     this.setState({
       totalTime: Number(minutes) * 60 + Number(seconds),
@@ -28,13 +37,9 @@ class Timer extends Component {
     this.timer = setInterval(() => {
       const { totalTime } = this.state;
 
-      if (totalTime > 0) {
+      if (totalTime >= 0) {
         this.setState({ totalTime: totalTime - 1 });
-      } else {
-        clearInterval(this.timer);
-      }
 
-      if (totalTime > 0) {
         const minutes = Math.floor(totalTime / 60);
         const seconds = totalTime % 60;
 
@@ -54,9 +59,9 @@ class Timer extends Component {
     return (
       <div>
         <div>
-          <span>{minutes}</span>
+          <span>{minutes.toString().padStart(2, '0')}</span>
           <span>:</span>
-          <span>{seconds}</span>
+          <span>{seconds.toString().padStart(2, '0')}</span>
         </div>
 
         <input
