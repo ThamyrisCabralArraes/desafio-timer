@@ -1,4 +1,5 @@
 import React, { Children, Component } from 'react';
+import Buttons from './Buttons';
 
 class Timer extends Component {
   state = {
@@ -15,9 +16,8 @@ class Timer extends Component {
   };
 
   handleStartTimer = () => {
-    const { totalTime } = this.state;
-
-    this.timer = setInterval(() => {
+    this.intervalId = setInterval(() => {
+      const { totalTime } = this.state;
       if (totalTime >= 0) {
         this.setState({ totalTime: totalTime - 1 });
 
@@ -28,7 +28,7 @@ class Timer extends Component {
       }
 
       if (totalTime === 0) {
-        clearInterval(this.timer);
+        clearInterval(this.intervalId);
         this.setState({ finished: true });
       }
     }, 1000);
@@ -37,7 +37,7 @@ class Timer extends Component {
   };
 
   handlePauseTimer = () => {
-    clearInterval(this.timer);
+    clearInterval(this.intervalId);
     this.setState({ paused: true });
   };
 
@@ -63,7 +63,7 @@ class Timer extends Component {
 
     this.setState({ minutes: Number(minutes), seconds: Number(seconds) });
 
-    this.timer = setInterval(() => {
+    this.intervalId = setInterval(() => {
       const { totalTime } = this.state;
 
       if (totalTime >= 0) {
@@ -76,14 +76,14 @@ class Timer extends Component {
       }
 
       if (totalTime === 0) {
-        clearInterval(this.timer);
+        clearInterval(this.intervalId);
         this.setState({ finished: true });
       }
     }, 1000);
   };
 
   handleStopTimer = () => {
-    clearInterval(this.timer);
+    clearInterval(this.intervalId);
     this.setState({ minutes: '00', seconds: '00' });
   };
 
@@ -114,47 +114,42 @@ class Timer extends Component {
           onChange={this.handleChange}
         />
 
-        <div className='flex justify-around  w-full max-w-xs'>
-          <button
-            onClick={this.handleTimer}
-            className='btn btn-primary w-24'
-          >
-            Start
-          </button>
+        <div className='flex justify-around w-full max-w-xs'>
+          <Buttons
+            className='btn w-24 btn-primary'
+            text='start'
+            handleFunction={this.handleTimer}
+          />
 
           {paused ? (
-            <button
-              onClick={this.handleStartTimer}
-              className='btn btn-secondary w-24'
-            >
-              Restart
-            </button>
+            <Buttons
+              className='btn w-24 btn-secondary'
+              text='Restart'
+              handleFunction={this.handleStartTimer}
+            />
           ) : (
-            <button
-              onClick={this.handlePauseTimer}
-              className='btn btn-secondary w-24'
-            >
-              Pause
-            </button>
+            <Buttons
+              className='btn w-24 btn-secondary'
+              text='Pause'
+              handleFunction={this.handlePauseTimer}
+            />
           )}
 
-          <button
-            onClick={this.handleStopTimer}
-            className='btn btn-accent w-24'
-          >
-            Stop
-          </button>
+          <Buttons
+            className='btn w-24 btn-accent'
+            text='Stop'
+            handleFunction={this.handleStopTimer}
+          />
         </div>
 
         {finished && (
           <div className='flex flex-col justify-center items-center gap-5'>
             <h1 className='text-2xl'>Time is Over!</h1>
-            <button
-              onClick={this.handleFineshed}
-              className='btn btn-success w-24'
-            >
-              Ok
-            </button>
+            <Buttons
+              className='btn w-24 btn-success'
+              text='Ok'
+              handleFunction={this.handleFineshed}
+            />
           </div>
         )}
       </div>
