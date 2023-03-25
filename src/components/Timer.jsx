@@ -7,10 +7,38 @@ class Timer extends Component {
     seconds: '00',
     inputNumber: '',
     finished: false,
+    paused: false,
   };
 
   handleChange = ({ target }) => {
     this.setState({ inputNumber: target.value });
+  };
+
+  handleStartTimer = () => {
+    const { totalTime } = this.state;
+
+    this.timer = setInterval(() => {
+      if (totalTime >= 0) {
+        this.setState({ totalTime: totalTime - 1 });
+
+        const minutes = Math.floor(totalTime / 60);
+        const seconds = totalTime % 60;
+
+        this.setState({ minutes, seconds });
+      }
+
+      if (totalTime === 0) {
+        clearInterval(this.timer);
+        this.setState({ finished: true });
+      }
+    }, 1000);
+
+    this.setState({ paused: false });
+  };
+
+  handlePauseTimer = () => {
+    clearInterval(this.timer);
+    this.setState({ paused: true });
   };
 
   handleTimer = () => {
@@ -64,7 +92,7 @@ class Timer extends Component {
   };
 
   render() {
-    const { minutes, seconds, inputNumber, finished } = this.state;
+    const { minutes, seconds, inputNumber, finished, paused } = this.state;
 
     return (
       <div className='flex flex-col justify-center items-center mt-10 gap-5'>
@@ -93,6 +121,23 @@ class Timer extends Component {
           >
             Start
           </button>
+
+          {paused ? (
+            <button
+              onClick={this.handleStartTimer}
+              className='btn btn-secondary w-24'
+            >
+              Restart
+            </button>
+          ) : (
+            <button
+              onClick={this.handlePauseTimer}
+              className='btn btn-secondary w-24'
+            >
+              Pause
+            </button>
+          )}
+
           <button
             onClick={this.handleStopTimer}
             className='btn btn-accent w-24'
