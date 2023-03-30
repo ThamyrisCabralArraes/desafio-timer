@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.fundo {
+  background-image: url(../public/amul.jpg);
+  background-repeat: repeat-x;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100vh;
+}
